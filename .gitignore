@@ -1,0 +1,8 @@
+.*
+*~
+umtskeeper.tar.gz
+umtskeeper/umtskeeper.daily.csv
+umtskeeper/umtskeeper.conf.sample
+umtskeeper/umtskeeper.hourly.csv
+umtskeeper/umtskeeper.monthly.csv
+umtskeeper/umtskeeper.stat
