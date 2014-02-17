@@ -1,0 +1,105 @@
+2.03
+
+20130722.22
+- Shutdown HTTP socket on program exit.
+- Added retry if IP could not be obtained from URL. (fixed with .22)
+
+20130720
+- Delay IP updater with logonly option when connection established (wait for
+  network ready).
+
+20130718
+- Added log view and some interactivity to HTML page.
+- Added some config vars for HTML page.
+- Added robots.txt for discouraging spiders from indexing the stats page.
+- Security Fix: calling Sakis3G through shell opened shell access to user.
+
+
+2.02
+
+20130717.18
+- Fixed bug in determining config changes in DDNS updater.
+
+20130717
+- Added Dynamic DNS (DDNS) update client.
+
+
+2.01
+
+20130709.00
+- Fixed type error with "wron PIN" message.
+- Changed graph to show expected 95-percentile instead of current median (which
+  turnd out rather meaningless).
+
+20130707.17
+- Fixed Sakis calls with writing to log when program did not wait for Sakis to
+  finish.
+- Fixed connect command.
+- Fixed type error on USB reset. (thanks Jan)
+- Fixed "try to reset USB device which is not present". (thanks Jan)
+- Fixed "program exit if old process not found".
+
+20130706
+- Tweaked the graphs a bit.
+- Added "connect" command, that causes connection to resume if it was suspended
+  by --sakismaxfails.
+- Added IP whitelisting for HTTP server.
+
+
+2.00
+
+20130702
+Umtskeeper2 is a complete re-write of the program in Python.
+
+Why Python?
+  Because it is a proper programming language. BASH scripting is good for some
+  things and poor at other things. It's really only piling calls of mini-
+  programs together. The syntax becomes accordingly complicated. Python is a
+  powerful language with lots of advantages for this purpose, among them:
+- Powerful data handling: lists, dictionaries, type conversions. For example,
+  getting a median from a list of values, which involves sorting of the list in
+  nested loops, can be a one-liner in Python: median=sorted(list)[len(list)/2].
+- Floating-point math! Yes, my computer sports a coprocessor :) Yours too?
+- Lots of modules for just about anything are included. For example, UMTSkeeper
+  has its own mini-webserver now which is only a few lines of code and the
+  inclusion of a standard module.
+- Comes with a debugger. Frustration with debugging is little. Things tend to
+  work. Documentation and examples are plenty.
+- Runs quite fast. Although it is still an interpreter language, the
+  interpreter will store the program as intermediate code on first run, so that
+  it will not have to be interpreted constantly. With UMTSkeeper2, your machine
+  will therefore be that 1% more enveronmental-friendly :)
+- Not least, there's rat in it.
+
+What's new?
+- Support for a configuration file, so there's an end to endless command lines.
+- A few parameters were added, notably:
+  maxSakisFails, sakisFailLockDuration: prevent Sakis3G from draining your
+    battery if no modem is plugged.
+  writeHTMLStats: disable writing of the HTML file.
+  --noroot switch: force all data to be written to program directory, so that
+    we don't need root access.
+- Data is now primarily kept in the system temporary directory which is a
+  virtual file system in RAM. This is especially good with devices like the
+  Raspberry Pi that run from an SD card.
+- Proper program shutdown, also when killed by ctrl+c or through other signals.
+  Program can be ended with the command "umtskeeper quit".
+- HTTP server to serve the statistics page(s). Enable it with
+  --httpserver (commandline) or conf['httpServer']=True (configfile). By
+  default, it serves at port 8000, so the page is reached from your network at
+  http://ip.of.machine:8000/
+- More sophisticated transfer statistics. You'll see that I like to play with
+  them. Graphs are now in SVG format. Much of this is experimental and will be
+  subject to change in the upcoming versions. Your old statistics will be
+  converted to a new format but they will not be that accurate. There are
+  commands to reset these numbers.
+
+What next? A few things are still planned:
+- Investigate running the thing as a real deamon, which should allow to run it
+  without log-in on stand-alone headless systems. Install/uninstall,
+  rc-scripts, logrotate.
+- Basic dynamic DNS update client - good for remote monitoring.
+- Probably make some more use of the webserver.
+- Get connect/disconnect markers into the graphs.
+
+
