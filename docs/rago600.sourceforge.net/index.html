@@ -1,0 +1,698 @@
+<HTML>
+<HEAD>
+<TITLE>
+Připojení tepelného čerpadla s řízením Rego 6xx k počítači
+</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1250" />
+</HEAD>
+<BODY>
+<TABLE>
+<TR>
+<TD>
+<H1>Jak připojit tepelné čerpadlo s řízením Rego 6xx k počítači</H1>
+</TD>
+<TD>
+<H1>How to connect heat pump with Rego 6xx controller to a computer</H1>
+</TD>
+</TR>
+<TR>
+<TD>
+<FONT COLOR="#FF0000"><H2>Licence</H2>
+Z důvodu ekonomické krize, jsem musel změnit licenční model. Čtěte proto pozorně odstavec <A HREF="#LIC">licence</A>.
+</FONT><BR>
+<H2>Obsah</H2>
+<UL>
+<LI><A HREF="#SCOPE">Obsah dokumentu (a hlavně co není obsahem)</A><BR>
+<LI><A HREF="#LED">Přídavné kontrolky</A><BR>
+<LI><A HREF="#HW">Hardware</A><BR>
+<LI><A HREF="#SW">Software</A><BR>
+<LI><A HREF="#WIN">Windows Software</A><BR>
+<LI><A HREF="FAQ.html">FAQ (Často kladené otázky)</A><BR>
+<LI><A HREF="http://www.nekropolis.cz/rego6xx/inside/">Pohled do nitra</A><BR>
+</UL>
+<BR>Registrováno jako projekt na <A HREF="https://sourceforge.net/projects/rago600/">SourceForge.net</A>
+</TD>
+<TD>
+<FONT COLOR="#FF0000"><H2>License</H2>
+I must change the license agreement given the economic crisis. Please read cerrfully <A HREF="#LIC">license</A> part.
+</FONT><BR><H2>Index</H2>
+<UL>
+<LI><A HREF="#SCOPE">Scope of document (and mainly out of scope)</A><BR>
+<LI><A HREF="#LED">Additional info lamps</A><BR>
+<LI><A HREF="#HW">Hardware</A><BR>
+<LI><A HREF="#SW">Software</A><BR>
+<LI><A HREF="#WIN">Windows Software</A><BR>
+<LI><A HREF="FAQ.html">FAQ Frequently Asked Questions</A><BR>
+<LI><A HREF="http://www.nekropolis.cz/rego6xx/inside/">Look inside</A><BR>
+</UL>
+<BR>Registered as <A HREF="https://sourceforge.net/projects/rago600/">SourceForge.net</A> project
+</TD>
+</TR>
+</TABLE>
+<HR>
+<TABLE ID="SCOPE">
+<TR>
+<TD>
+<H2>Obsah dokumentu</H2>
+Chtěl bych zde uvést na pravou míru zaměření tohoto dokumentu, protože jej čte velké množství lidí s falešným očekáváním.<BR><BR>
+Tento dokument si klade za cíl seznámit čtenáře s principem a podrobnostmi komunikace řídící jednotky REGO600 používané v tepelných čerpadlech IVT/Bosch/Autotherm/Carrier a možná i dalších.<BR>
+Rozhodně se nejedná o dokument popisující hotový produkt a ani podrobný návod jak produkt vyrobit. Je zde detailně popsán návod na vytvoření dobré hadrwarové části, ale software je popsán pouze principiálně.<BR>
+Je zde uveden příklad software, který lze použít jako modul a nebo k otestování vyrobeného hardware. V každém případě je však nutno do programu zasahovat a minimálně editovat konstanty v úvodní části. Program se spokojí s vypsáním 
+hodnot na obrazovku. Nemá žádné uživatelské rozhraní a ani grafické výstupy. Pokud dokážete myslet na úrovni operačního systému unixového typu, budete schopni si doplnit grafický výstup z jiného programového produktu.<BR>
+Pokud jste schopni programovat v prostředí borland delphi pro windows, mohu vám pomoci a můžeme společně vytvořit uživatelsky příjemný produkt. <BR>
+Pokud jste schopni programovat v jiném visuálním nástroji pro windows, mohu se pokusit jej pochopit a také vám pomoci<BR><BR>
+Pokud hledáte hotový produkt, kontaktujte svého zástupce IVT a ptejte se na produkt IVT@Home<BR><BR>
+Pokud máte problém s tvorbou hardwarové části, přesvědčil jsem kamaráda Pavla Dvořáka, který je schopen zařízení vyrobit a poslat. (cenu, formu dodávky si prosím domluvte individuálně) Odkaz najdete v části <A HREF="FAQ.html#PD">FAQ</A><BR><BR>
+Bonus pro lidi co ovládají češtinu: pokud vás zajímají moje zkušenosti s tepelným čerpadlem (provoz, instalace), pošlete mi e-mail na adresu uvedenou na konci dokumentu a určitě vás neodmítnu.<BR>
+</TD>
+<TD>
+<H2>Document scope</H2>
+I would like to describe scope of this document, because so many people trying to find there information which is not primary part of that document.<BR><BR>
+Purpurose of this document is inform readers about principles of communication of unit REGO600 used in heatpumps IVT/Bosch/Autotherm/Carrier and others.<BR>
+Definitly out of scope is description of final product or detail description how to build a product. Here is described in details how to build hardware part, but software part is described only in general.<BR>
+On the page is presented example of software, which can be used as a module or as a test for hardware part. In each cases must be code edited and configured, minimaly constants in first configuration part. Program simply print out
+measured values to screen and finish. There are no user interface or graphical output. If you are able to think in unix type operating system level, you will be able to connect graphical output from other software<BR>
+If you are able to program in borland delphi for windows, I can help you with it and we can create user friendly product.<BR>
+If you are able to program in different visual tools for windows, I can try to understand it and try to help you too<BR><BR>
+If you are looking for finished product, please contact your IVT dealer and ask for IVT@Home product<BR><BR>
+If making a hardware part is a problem for you, good news is, that I persuade my friend Pavel Dvořák (who is able to produce and send hardware) to help you. (price and sending method is individual part of agreement with you and Pavel) Reference can be found in <A HREF="FAQ.html#PD">FAQ</A> part.<BR><BR>
+
+</TD>
+</TR>
+</TABLE>
+<HR>
+<TABLE ID="LED">
+<TR>
+<TD>
+<H2>Přídavné kontrolky</H2>
+Tato kapitola nesouvisí zcela s podstatou článku, ale někomu může zjednodušit život.<BR><BR>
+Pokud potřebujete pouze připojit informativní kontrolku která bude například v jiné místnosti
+signalizovat poruchu, stačí správně použít připravené svorky.<BR>
+</TD>
+<TD>
+<H2>Additional info lamps</H2>
+This chapter not exactly fitting topics of this text, but can help to somebody.<BR><BR>
+If you only need additional info lamps for showing for example alarm situation in different room,
+you can simply use prepared mounting points in heatpump.<BR>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><IMG SRC="alarm_led_1.GIF"> <IMG SRC="alarm_led_2.GIF"> <IMG SRC="alarm_led_3.GIF"><BR>
+<I>Možnosti připojení přídavných kontrolek | Possibility of connection additional lamps</I>
+</TD>
+</TR>
+<TR>
+<TD>
+Obrázky ukazují tři základní možnosti připojení.<BR>
+<UL>
+<LI>Červená LED na prvním zapojení bude blikat v případě, že bude čerpadlo signalizovat alarm.
+<LI>Zelená LED na druhém obrázku bude za normálního provozního stavu svítit, v případě alarmu bude blikat.
+<LI>Žárovka na třetím obrázku zobrazuje možnost připojení například sledovacího zařízení. Bude svítit v případě alarmu.
+</UL>
+</TD>
+<TD>
+Pictures showing tree basic types of interconnection of lamps.<BR>
+<UL>
+<LI>Red LED at the first picture will blink in a case of alarm on heatpump.
+<LI>Green LED at second picture will light at normal state and will blink in a case of alarm.
+<LI>Lamp at third picture representing possibility of interconnection for example monitoring device. It will light in a case of alarm.
+</UL>
+</TD>
+</TR>
+</TABLE>
+<HR>
+<TABLE ID="HW">
+<TR>
+<TD>
+<H2>Hardware</H2>
+Na trhu existuje celá řada celkem kvalitních tepelných čerpadel vycházejících ze stejného základu vytvořeného firmou IVT. Jedná se buď o brandovaná oem čerpadla, nebo licenční stroje. Dají se najít pod značkou IVT, Bosch, Carrier, Autotherm a možná i další. Všechna tato čerpadla používají pro své řízení jednotku Rego 600 nebo novější (Rego 6xx).<BR><BR>
+Tyto řídící jednotky jsou vybaveny komunikačním rozhraním pro připojení počítače nebo jiné řídící jednotky.<BR><BR>
+Jednotky jsou vybaveny sériovým portem označeným jako "Service". Jeho konektor je vždy v blízkosti řídící jednotky. Jedná se o 5V variantu sériového portu, takže délka kabelu nemá přesahovat 50cm. Rozhraní je osazeno 9 pin konektorem can/d-sub.<BR>
+Nožičky konektoru mají následující význam:<BR>
+2 - RxD<BR>
+3 - TxD<BR>
+4 - +5V<BR>
+5 - GND<BR>
+<BR>
+Komunikace vždy probíhá rychlostí 19200 bps, 8 bit, bez parity, 1 stop bit (19200/8N1). Jedná se o 5V CMOS 4000 (TTL) signály, které je nutné připojovat galvanicky oddělené. Proto pro jejich připojení použijeme optický oddělovač. Například MCT6, ILD2 nebo podobné.<BR><BR>
+Příklad zapojení optického oddělovače je uveden na následujícím obrázku.
+</TD>
+<TD>
+<H2>Hardware</H2>
+Here is a few good quality heat pumps on a market, which are based on same conception based by company IVT. That heat pumps are brended or licensed to another companies. It is possible to find them branded as IVT, Bosch, Carrier, AutoTherm and possible others. All that heatpumps using Rego 600 control unit for their driving (or newer Rego 6xx).<BR><BR>
+Those control units contains serial communication interface marked as "Service". Header of this interface are close of control unit. This is 5V serial interface, it mean their cable may be not longer than 50cm. Interface is connecter by 9 pin can/d-sub connector.<BR>
+Pinout of this connector are following:<BR>
+2 - RxD<BR>
+3 - TxD<BR>
+4 - +5V<BR>
+5 - GND<BR>
+<BR>
+Communication allways using 19200 bps, 8 bit, no parity, 1 stop bit (19200/8N1). This is 5V CMOS 4000 (TTL) signals, which must be connected by galvanic separator. In that case we will use optocoupler for separation. There are available optocouplers for example MCT6, ILD2 or ekvivalent<BR><BR>
+Example of generic connection are shown on following picture.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><A HREF="generic_com.gif" TARGET="generic_com"><IMG SRC="generic_com_s.gif"></A><BR>
+<A HREF="generic_com.pdf" TARGET="generic_com"><IMG SRC="pdf.gif"></A>
+<A HREF="generic_com.sch"><IMG SRC="sch.gif"></A> <BR>
+<I>Obr. 0 Základní zapojení | Fig. 0 Basic schematic</I>
+</TD>
+</TR>
+<TR>
+<TD>
+Toto schéma se dá jednoduše rozšířit na připojení pomocí sériového portu RS-232 (sériový port v počítači)<BR><BR>
+Stačí přidat převodník úrovní RS-232 - TTL. Například obvod MAX232. Jako napájení pro napájení je možné použít například napájení na portu USB. (lze použít i napájení pro klávesnici, nebo gameport, eventualně jiné metody)
+</TD>
+<TD>
+It is easy to enhance this schematics to connect to RS-232 serial interface in computers.<BR><BR>
+Be enough for them RS-232 - TTL level converter. For example MAX232 device. As a source of electric power cam be used for example power pins from USB. (it is also possible to use power for keyboard, gameport or other methods)
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><A HREF="ivt_serial.gif" TARGET="ivt_serial"><IMG SRC="ivt_serial_s.gif"></A><BR>
+<A HREF="ivt_serial.pdf" TARGET="ivt_serial"><IMG SRC="pdf.gif"></A>
+<A HREF="ivt_serial.sch"><IMG SRC="sch.gif"></A> <BR>
+<I>Obr. 1 - připojení RS-232 kabelem | Fig. 1 - RS-232 cable connection</I>
+</TD>
+</TR>
+<TR>
+<TD>
+Hlavní problém tohoto řešení spočívá v tom, že tepelné čerpadlo většinou stojí v technické místnosti, v lepším případě v prádelně nebo koupelně. Málokdo si předem připravil datovou konektivitu do místností tohoto typu. Málokdo je také připraven nechávat počítač v takovéto místnosti.<BR><BR>
+Proto jsem se rozhodl využít pro připojení ty dráty, které k tepelnému čerpadlu rozhodně vedou. Tepelné čerpadlo se běžně připojuje třífázovou přípojkou. Proto můžeme pohodlně použít zařízení pro komunikaci po silovém vedení. Navíc si vždy můžeme vybrat správnou fázi pro efektivní komunikaci.<BR><BR>
+Na internetu je překvapivě velké množství zařízení komunikujících malou rychlostí (protokoly X1 a pod), na druhou stranu aliance <A HREF="http://www.homeplug.org">HomePlug</A> vytvořila levná zařízení pro přanos až 200mbps. Bohužel pouze s rozhraním ethernet.<BR>
+Jako vhodný kompromis se ukázaly modemy pro komunikaci po silovém vedení typu PLC-485A prodávané pod značkou <A HREF="http://www.linksprite.com/">LinkSprite</A>. Modem je možné koupit jako <A HREF="http://www.linksprite.com/index.php?cPath=217&osCsid=ef003c78ce8e8442a760ea9bcb255110">modul</A> nebo jako hotová <A HREF="http://www.linksprite.com/index.php?cPath=224&osCsid=ef003c78ce8e8442a760ea9bcb255110">zařízení</A>.<BR>
+Pro instalaci do tepelného čerpadla jsem si zvolil modul bez dceřiné desky, ke kterému jsem vyyvpřil vlastní rozhraní.<BR>
+Na následujícím obrázku je uvedeno schéma dceřiné desky pro připojení tepelného čerpadla.
+</TD>
+<TD>
+Main problem of this solution is, that it usualy located in technical room, in better cases in laundry, washrom or bathroom. Not many users prepared data line to this type of room. Not many users also want to leave computers in that type of room.<BR><BR>
+In that case I decided to use for connection most comon wires presented here. It is three phase power line wires. In that case we can easily use devices for power line communication. In addition we can chose correct phase for most efective communication.<BR><BR>
+On the Internet is presented surprising number of devices using small communication speed (for example X1 protocols etc.), from the other hand there is <A HREF="http://www.homeplug.org">HomePlug</A> aliance makes cheap devices for transfer up to 200mbps. However only with ethernet interface.<BR>
+As a good compromise look like to be power line communications modems PLC-485 type marked as  <A HREF="http://www.linksprite.com/">LinkSprite</A>. It is possible to buy modem as <A HREF="http://www.linksprite.com/index.php?cPath=217&osCsid=ef003c78ce8e8442a760ea9bcb255110">module</A> or as a final <A HREF="http://www.linksprite.com/index.php?cPath=224&osCsid=ef003c78ce8e8442a760ea9bcb255110">devices</A>.<BR>
+For an installation into heat pump I used module without doughter board. I make myself doughter board with my own interface.<BR>
+On following picture is presented schematic of that doughter board for connecting the heat pump.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><A HREF="ivt_plc.gif" TARGET="ivt_plc"><IMG SRC="ivt_plc_s.gif"></A><BR>
+<A HREF="ivt_plc.pdf" TARGET="ivt_plc"><IMG SRC="pdf.gif"></A>
+<A HREF="ivt_plc.sch"><IMG SRC="sch.gif"></A> <BR>
+<I>Obr. 2 Připojení po elektrické síti | Fig. 2 Power line connection</I>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Úprava nové verze PCL modemu</B><BR>
+<A HREF="http://www.linksprite.com/">LinkSprite</A> vydalo novou verzi PLC modemu, která má poněkud nešťastně vyřešenou citlivost vstupních svorek.
+Proto jsem musel přidat obvod pro posílení a upravení hran.<BR>
+Vyzkoušel jsem dvě varianty připojení. Jednodušší varianta (A) pouze zesiluje signál, rozšířená varianta (B) navíc přidává led diodky pro umístění na panel.<BR><BR>
+Pokud máte problém s připojením k počítači (pozná se tak, že zařízení nesprávně reaguje na "+++"), doporučuji také přidat zesilovač na stranu počítače.
+</TD>
+<TD>
+<B>Enhancement for new version of PLC modem</B><BR>
+<A HREF="http://www.linksprite.com/">LinkSprite</A> released new version of PLC modem. This version of modem have little distressful sensitivity for input pins.
+In that case I must add circuit for ampfiling and forming of signal.<BR>
+I have tested two versions of circuit. First - easier variant (A) only ampfiling the signal, second variant (B) also adding led diodes for placing on front panel<BR><BR>
+If you will found problems also with interconnection to computer (found, that modem not responding to "+++" sequence), I recomend to add ampfiler to computer side too.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><A HREF="ivt_plc_a.gif" TARGET="ivt_plc_a"><IMG SRC="ivt_plc_a_s.gif"></A><BR>
+<A HREF="ivt_plc_a.pdf" TARGET="ivt_plc_a"><IMG SRC="pdf.gif"></A>
+<A HREF="ivt_plc_a.sch"><IMG SRC="sch.gif"></A> <BR>
+<I>Obr. 3-A Připojení po elektrické síti / jednoduché | Fig. 3-A Power line connection / simple</I><BR>
+<BR><A HREF="ivt_plc_b.gif" TARGET="ivt_plc_b"><IMG SRC="ivt_plc_b_s.gif"></A><BR>
+<A HREF="ivt_plc_b.pdf" TARGET="ivt_plc_b"><IMG SRC="pdf.gif"></A>
+<A HREF="ivt_plc_b.sch"><IMG SRC="sch.gif"></A> <BR>
+<I>Obr. 3-B Připojení po elektrické síti / zábavné | Fig. 3-B Power line connection / funny</I><BR>
+<BR><A HREF="ivt_plc_c.gif" TARGET="ivt_plc_c"><IMG SRC="ivt_plc_c_s.gif"></A><BR>
+<A HREF="ivt_plc_c.pdf" TARGET="ivt_plc_c"><IMG SRC="pdf.gif"></A>
+<A HREF="ivt_plc_c.sch"><IMG SRC="sch.gif"></A> <BR>
+<I>Obr. 3-C Připojení po elektrické síti / minimalistické | Fig. 3-C Power line connection / minimalistic</I><BR>
+<SUB>Pro informaci - verzi 3-C aktuálně používám | For your info: I'm currentely using version 3-C</SUB><BR><BR>
+
+</TD>
+</TR>
+<TR>
+<TD>
+Pro praktickou realizaci jsem použil voděodolnou, požár nešířící krabičku, do které se pohodlně vejde celé zařízení. Dceřinou desku jsem, vzhledem k její jednoduchosti, osadil na univerzální plošný spoj.<BR>
+Celou krabičku je nutné umístit do blízkosti řídící jednotky. To je důležité brát v úvahu při mechanické konstrukci.<BR>
+Také je důležité vzít v úvahu chlazení. Uvnitř tepelného čerpadla je celkem dost teplo a špatná cirkulace vzduchu.<BR><BR>
+Následující fotografie ukazují praktickou realizaci.
+</TD>
+<TD>
+For practiacal realisation i have used water proof, fire proof box, which easy fitting all device. Becouse doughter board is simple, I have done it on universal circuit board.<BR>
+All device must be placed close of controll unit. It is necessary to care about it during mechanical construction, because in this part of heatpump is not enoughtplace.<BR>
+It is necessary to thing about cooling. Inside heatpump is higher temperature and wrong air circulation.<BR><BR>
+Following photos showing my working example.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER>
+<A HREF="PLC_ifc_1.JPG" TARGET="PLC_ifc_1"><IMG SRC="PLC_ifc_1_s.JPG" ALT="dceřiná deska | Doughter board"></A> &nbsp;
+<A HREF="PLC_kotel_1.JPG" TARGET="PLC_kotel_1"><IMG SRC="PLC_kotel_1_s.JPG" ALT="zařízení na straně tepelného čerpadla | heat pump side device"></A>
+<A HREF="PLC_kotel_2.JPG" TARGET="PLC_kotel_2"><IMG SRC="PLC_kotel_2_s.JPG" ALT="připojení konektoru | connecting of device"></A> 
+<A HREF="PLC_kotel_3.JPG" TARGET="PLC_kotel_3"><IMG SRC="PLC_kotel_3_s.JPG" ALT="umístění zařízení v tepelném čerpadle | placing of device inside heat pump"></A> &nbsp;
+<A HREF="PLC_PC_1.JPG" TARGET="PLC_PC_1"><IMG SRC="PLC_PC_1_s.JPG" ALT="zařízení na straně PC (s originál RS-232 dceřinou deskou) | PC side device (with original RS-232 doughter board)"></A>
+<A HREF="PLC_PC_2.JPG" TARGET="PLC_PC_2"><IMG SRC="PLC_PC_2_s.JPG" ALT="zařízení připojené k PC | device connected to PC"></A>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Poznámky:</B><UL>
+<LI>zjistil jsem, že zařízení nefunguje správně s některými USB&lt;-&gt;RS-232 porty.
+<LI>pro jednoduché ovládání existuje komfortní software <A HREF="http://www.husdata.se/eng/info_online.asp">StatLink</A>.
+<LI>před uvedením do provozu je nutné nastavit komunikační rychlost na zařízení na <A HREF="http://forum.linksprite.com/viewtopic.php?f=5&t=13">19200bps</A>.
+<LI>v Čechách neexistuje maloobchodní prodejce 2mm konektorů pro digi sběrnici. Je však možné použít jiné konektory dostupné na modulu.
+<LI>IVT připravuje vlastní software pod označením IVT@Home.
+<LI>Také je k dispozici <A HREF="http://forum.linksprite.com/viewforum.php?f=5&sid=ea4a40a26dceea31c2e025ac4471efe9">fórum</A> o PLC.
+</UL>
+</TD>
+<TD>
+<B>Notes:</B><UL>
+<LI>I have found, that device not working correctly with some USB&lt;-&gt;RS-232 transceivers.<BR>
+<LI>for easy use exist comfortable software <A HREF="http://www.husdata.se/eng/info_online.asp">StatLink</A>.
+<LI>it is neccesary to configure device for using <A HREF="http://forum.linksprite.com/viewtopic.php?f=5&t=13">19200bps</A> baudrate.
+<LI>in CZ is no end seller for 2mm headers for digi bus. It is posible to use other headers on modules.
+<LI>IVT preparing own software called IVT@Home.
+<LI>There is available <A HREF="http://forum.linksprite.com/viewforum.php?f=5&sid=ea4a40a26dceea31c2e025ac4471efe9">forum</A> about PLC.
+</UL>
+</TD>
+</TR>
+</TABLE>
+<HR>
+<TABLE ID="SW">
+<TR>
+<TD>
+<H2>Software</H2>
+Komunikace probíhá vždy prostřednictvím paketů stejné délky a stejné struktury. Následující obrázek ukazuje příklad takové komunikace.
+</TD>
+<TD>
+<H2>Software</H2>
+Communication running allways by using packet same size and same structure. Following picture displaying example of that communication.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><IMG SRC="com.GIF"><BR>
+<I>Obr. 4 Struktura komunikačních paketů | Fig. 4 Structures of communication packets</I>
+</TD>
+</TR>
+<TR>
+<TD>
+Všechna čísla jsou zobrazována v šestnáctkovém tvaru (hex).<BR><BR>
+Paket požadavku má vždy 9 znaků (čísel). Odpověď existuje standardní 5 znaků, nebo prodloužená 42 znaků.<BR>
+<H3>Reprezentace čísel</H3>
+Rego6xx používá 7 a méně bitů pro komunikaci, většina čísel je reprezentovaná jako 16ti bitová. Při komunikaci se nejprve posílá vyšší řád.<BR>
+V případě teploty se posílá desetinásobek jako celé číslo ve formátu dvojkového doplňku.<BR><BR>
+<B>Například:</B><BR>
+Register 020B je šestnáctibitové číslo.<BR>
+Rozepíšeme si jej do dvojkového 0000 0010|0000 1011<BR>
+Od konce si označíme skupiny po 7 bitech 00|0000100|0001011<BR>
+A dostaneme číslo v 7 bit reprezentaci 00 04 0B<BR><BR>
+Obdržíme teplotu 00 04 38<BR>
+Rozepíšene si 7 bitová čísla za sebe: 0000000|0000010|0111000<BR>
+Vyznačíme si řády 8 mitové reprezentace 00000001|00111000<BR>
+A dostaneme číslo: 138(hex) 312(desítkově)<BR>
+Teplota je tedy desetina 31,2C<BR><BR>
+Obdržíme teplotu 03 7C 1D<BR>
+Rozepíšene si 7 bitová čísla za sebe: 0000011|1111100|0011101<BR>
+Vyznačíme si řády 8 mitové reprezentace 11111110|00011101<BR>
+A dostaneme číslo: FE1D(hex) 65053(desítkově)-483(dvojkový doplněk)<BR>
+Teplota je tedy desetina -48,3C<BR>
+<BR>
+<H3>Adresa(Address)</H3>
+Pravděpodobně umožňuje adresovat více zařízení, já jsem narazil pouze na adresování 81 tepelné čerpadlo a 01 počítač.<BR><BR>
+<H3>Příkaz(Command)</H3>
+Pravděpodobně existuje tabulka příkazů, kterou se pokusím vytvořit. Zatím mám velice málo informací.<BR><BR>
+</TD>
+<TD>
+All numbers are displayed in hex format.<BR><BR>
+Request packet allways consist of 9 characters (numbers). Response exist in standard form (5 characters) or long form (42 characters).<BR>
+<H3>Representation of numbers</H3>
+Rego6xx using 7 and less bits for communication. Most numbers are represented as a 16bit numbers. For communication higher part of numbers are send first.<BR>
+For representing temperature is used ten multiple as a sign integer.<BR><BR>
+<B>For example:</B><BR>
+Register 020B is sixteen bit number.<BR>
+Let's write it in binary form 0000 0010|0000 1011<BR>
+Now we can mark 7 groups from the end 00|0000100|0001011<BR>
+And now we have this number in 7 bit form 00 04 0B<BR><BR>
+We have received temperature 00 04 38<BR>
+Let's write 7 bit numbers in binary form 0000000|0000010|0111000<BR>
+We will mark 8 bit delimiters 00000001|00111000<BR>
+It is: 138(hex) 312(dec)<BR>
+In that case temperature is 31.2C<BR><BR>
+We have received temperature  03 7C 1D<BR>
+Let's write 7 bit numbers in binary form 0000011|1111100|0011101<BR>
+We will mark 8 bit delimiters 11111110|00011101<BR>
+It is: FE1D(hex) 65053(dec)-483(signed integer)<BR>
+Received temperature is -48.3C<BR>
+<H3>Address</H3>
+It is possible, that it alows to have more devices on line. I have found only addresing 81 for heatpump and 01 for computer.<BR><BR>
+<H3>Command</H3>
+There must exist table of commands. I will try to create some. Currentely I have not enough information.<BR><BR>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><TABLE border=1 frame=box>
+<TR><TH>Příkaz</TH><TH>hex</TH><TH>param</TH><TH>resp</TH><TH>Command</TH></TR>
+<TR><TD>Čtení dat z panelu<BR><SUB>(klávesy+led)</SUB></TD><TD>00</TD><TD>1 - address</TD><TD>5char <SUB>16bit number</SUB></TD><TD>Read from front panel<BR><SUB>(keyboard+leds) {reg 09FF+xx}</SUB></TD></TR>
+<TR><TD>Zápis do čelního panelu<BR><SUB>(klávesy+led)</SUB></TD><TD>01</TD><TD>2 - address + data</TD><TD>1char <SUB>confirm</SUB></TD><TD>Write to front panel<BR><SUB>(keyboard+leds) {reg 09FF+xx}</SUB></TD></TR>
+<TR><TD>Čtení ze systémováho registru<BR><SUB>(topná křivka, teploty, stav zařízení)</SUB></TD><TD>02</TD><TD>1 - address</TD><TD>5char <SUB>16bit number</SUB></TD><TD>Read from system register<BR><SUB>(heat curve, temperatures, devices) {reg 1345+xx}</SUB></TD></TR>
+<TR><TD>Zápis do systémováho registru<BR><SUB>(topná křivka, teploty, stav zařízení)</SUB></TD><TD>03</TD><TD>2 - address + data</TD><TD>1char <SUB>confirm</SUB></TD><TD>Write into system register<BR><SUB>(heat curve, temperatures, devices) {reg 1345+xx}</SUB></TD></TR>
+<TR><TD>Čtení registrů časovačů</TD><TD>04</TD><TD>1 - address</TD><TD>5char <SUB>16bit number</SUB></TD><TD>Read from timer registers <SUB>{reg 1B45+xx}</SUB></TD></TR>
+<TR><TD>Zápis registrů časovačů</TD><TD>05</TD><TD>2 - address + data</TD><TD>1char <SUB>confirm</SUB></TD><TD>Write into timer registers <SUB>{reg 1B45+xx}</SUB></TD></TR>
+<TR><TD>Čtení z registrů 1B61</TD><TD>06</TD><TD>1 - address</TD><TD>5char <SUB>16bit number</SUB></TD><TD>Read from register 1B61 <SUB>{reg 1B61+xx}</SUB></TD></TR>
+<TR><TD>Zápis do registrů 1B61</TD><TD>07</TD><TD>2 - address + data</TD><TD>1char <SUB>confirm</SUB></TD><TD>Write into register 1B61 <SUB>{1B61+xx}</SUB></TD></TR>
+<TR><TD>Čtení z displaye</TD><TD>20</TD><TD>1 - display line</TD><TD>42char <SUB>text line</SUB></TD></TD>42char - text line</TD><TD>Read from display <SUB>{0AC7+15h*xx}</SUB></TD></TR>
+<TR><TD>Čtení poslední chyby</TD><TD>40</TD><TD>0</TD><TD>42char <SUB>text line</SUB></TD><TD>Read last error line <SUB>[4100/00]</SUB></TD></TR>
+<TR><TD>Čtení předchozí chyby</TD><TD>42</TD><TD>0</TD><TD>42char <SUB>text line</SUB></TD><TD>Read previous error line (prev from last reading) <SUB>[4100/01]</SUB></TD></TR>
+<TR><TD>Verze rego jednotky (vždy 600)</TD><TD>7F</TD><TD>0</TD><TD>5char <SUB>16bit number</SUB><TD>Read rego version<BR><SUB>{constant 0258 = 600 ?Rego 600?}</SUB></TD></TR>
+</TABLE>
+<I>Tab. 1 seznam příkazů | Tab 1. list of commands</I>
+</TD>
+</TR>
+<TR>
+<TD>
+<H3>Adresa registru(Register address)</H3>
+Pravděpodobně existuje tabulka registrů, kterou se pokusím vytvořit. Zatím mám velice málo informací. Tabulka se mírně liší pro různé typy čerpadel a pro různé verze jednotek Rago6xx.<BR><BR>
+</TD>
+<TD>
+<H3>Register address</H3>
+There must exist table of registers. I will try to create some. Currentely I have not enough information. Table contains a small differences for different versions of heat pump and for different versions of Rego6xx controllers<BR><BR>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><TABLE border=1 frame=box>
+<TR><TH>Registr</TH><TH>Rego600-635</TH><TH>Rego636-...</TH><TH>Register</TH></TR>
+
+
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD><TD></TD></TR>
+<TR><TD><I>Hodnoty čidel</I></TD><TD></TD><TD></TD><TD><I>Sensor values</I></TD></TR>
+<TR><TD>Zpátečka [GT1]</TD><TD>0209</TD><TD>020B</TD><TD>Radiator return [GT1]</TD></TR>
+<TR><TD>Venkovní [GT2]</TD><TD>020A</TD><TD>020C</TD><TD>Outdoor [GT2]</TD></TR>
+<TR><TD>Bojler [GT3]</TD><TD>020B</TD><TD>020D</TD><TD>Hot water [GT3]</TD></TR>
+<TR><TD>výstup do směš. okruhu [GT4]</TD><TD>020C</TD><TD>020E</TD><TD>Forward [GT4]</TD></TR>
+<TR><TD>Místnost [GT5]</TD><TD>020D</TD><TD>020F</TD><TD>Room [GT5]</TD></TR>
+<TR><TD>Kompresor [GT6]</TD><TD>020E</TD><TD>0210</TD><TD>Compressor [GT6]</TD></TR>
+<TR><TD>Teplý okruh výstup [GT8]</TD><TD>020F</TD><TD>0211</TD><TD>Heat fluid out [GT8]</TD></TR>
+<TR><TD>Teplý okruh vstup [GT9]</TD><TD>0210</TD><TD>0212</TD><TD>Heat fluid in [GT9]</TD></TR>
+<TR><TD>Studený okruh vstup [GT10]</TD><TD>0211</TD><TD>0213</TD><TD>Cold fluid in [GT10]</TD></TR>
+<TR><TD>Studený okruh výstup [GT11]</TD><TD>0212</TD><TD>0214</TD><TD>Cold fluid out [GT11]</TD></TR>
+<TR><TD>Externí bojler [GT3x]</TD><TD>0213</TD><TD>0215</TD><TD>External hot water [GT3x]</TD></TR>
+
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD><TD></TD></TR>
+<TR><TD><I>Hodnoty zařízení</I></TD><TD></TD><TD></TD><TD><I>Device values</I></TD></TR>
+<TR><TD>Oběhové čerpadlo zemního okruhu [P3]</TD><TD>01FD</TD><TD>1FF</TD><TD>Ground loop pump [P3]</TD></TR>
+<TR><TD>Kompresor</TD><TD>01FE</TD><TD>0200</TD><TD>Compresor</TD></TR>
+<TR><TD>Přídavné topení 3kW</TD><TD>01FF</TD><TD>201</TD><TD>Additional heat 3kW</TD></TR>
+<TR><TD>Přídavné topení 6kW</TD><TD>0200</TD><TD>202</TD><TD>Additional heat 6kW</TD></TR>
+<TR><TD>Radiátorové čerpadlo [P1]</TD><TD>0203</TD><TD>0205</TD><TD>Radiator pump [P1]</TD></TR>
+<TR><TD>Čerpadlo vnitřního oběhu [P2]</TD><TD>0204</TD><TD>0206</TD><TD>Heat carrier pump [P2]</TD></TR>
+<TR><TD>Rozdělovací trojcestný ventil [VXV]</TD><TD>0205</TD><TD>0207</TD><TD>Tree-way valve [VXV]</TD></TR>
+<TR><TD>Porucha</TD><TD>0206</TD><TD>0208</TD><TD>Alarm</TD></TR>
+
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD><TD></TD></TR>
+<TR><TD><I>Řídící data</I></TD><TD></TD><TD></TD><TD><I>Control data</I></TD></TR>
+<TR><TD>GT1 Cílová hodnota</TD><TD>006E</TD><TD>006E</TD><TD>GT1 Target value</TD></TR>
+<TR><TD>GT1 Zapínací hodnota</TD><TD>006F</TD><TD>006F</TD><TD>GT1 On value</TD></TR>
+<TR><TD>GT1 Vypínací hodnota</TD><TD>0070</TD><TD>0070</TD><TD>GT1 Off value</TD></TR>
+<TR><TD>GT3 Cílová hodnota</TD><TD>002B</TD><TD>002B</TD><TD>GT3 Target value</TD></TR>
+<TR><TD>GT3 Zapínací hodnota</TD><TD>0073</TD><TD>0073</TD><TD>GT3 On value</TD></TR>
+<TR><TD>GT3 Vypínací hodnota</TD><TD>0074</TD><TD>0074</TD><TD>GT3 Off value</TD></TR>
+<TR><TD>GT4 Cílová hodnota</TD><TD>006D</TD><TD>006D</TD><TD>GT4 Target value</TD></TR>
+<TR><TD>Dotop v %</TD><TD>006C</TD><TD>006C</TD><TD>Add heat power in %</TD></TR>
+
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD><TD></TD></TR>
+<TR><TD><I>Nastavení</I></TD><TD></TD><TD></TD><TD><I>Settings</I></TD></TR>
+<TR><TD>Topná křivka</TD><TD>0000</TD><TD>0000</TD><TD>Heat curve</TD></TR>
+<TR><TD>Jemné doladění</TD><TD>0001</TD><TD>0001</TD><TD>Heat curve fine adj.</TD></TR>
+<TR><TD>Nastavení vnitřní teploty</TD><TD>0021</TD><TD>0021</TD><TD>Indoor temp setting</TD></TR>
+<TR><TD>Vliv vnitřní tepl. na křivku</TD><TD>0022</TD><TD>0022</TD><TD>Curve infl. by in-temp.</TD></TR>
+<TR><TD>Prizp. krivky pri 20° venku</TD><TD>001E</TD><TD>001E</TD><TD>Adj. curve at 20° out</TD></TR>
+<TR><TD>Prizp. krivky pri 15° venku</TD><TD>001C</TD><TD>001C</TD><TD>Adj. curve at 15° out</TD></TR>
+<TR><TD>Prizp. krivky pri 10° venku</TD><TD>001A</TD><TD>001A</TD><TD>Adj. curve at 10° out</TD></TR>
+<TR><TD>Prizp. krivky pri 5° venku</TD><TD>0018</TD><TD>0018</TD><TD>Adj. curve at 5° out</TD></TR>
+<TR><TD>Prizp. krivky pri 0° venku</TD><TD>0016</TD><TD>0016</TD><TD>Adj. curve at 0° out</TD></TR>
+<TR><TD>Prizp. krivky pri -5° venku</TD><TD>0014</TD><TD>0014</TD><TD>Adj. curve at -5° out</TD></TR>
+<TR><TD>Prizp. krivky pri -10° venku</TD><TD>0012</TD><TD>0012</TD><TD>Adj. curve at -10° out</TD></TR>
+<TR><TD>Prizp. krivky pri -15° venku</TD><TD>0010</TD><TD>0010</TD><TD>Adj. curve at -15° out</TD></TR>
+<TR><TD>Prizp. krivky pri -20° venku</TD><TD>000E</TD><TD>000E</TD><TD>Adj. curve at -20° out</TD></TR>
+<TR><TD>Prizp. krivky pri -25° venku</TD><TD>000C</TD><TD>000C</TD><TD>Adj. curve at -25° out</TD></TR>
+<TR><TD>Prizp. krivky pri -30° venku</TD><TD>000A</TD><TD>000A</TD><TD>Adj. curve at -30° out</TD></TR>
+<TR><TD>Prizp. krivky pri -35° venku</TD><TD>0008</TD><TD>0008</TD><TD>Adj. curve at -35° out</TD></TR>
+<TR><TD>Spojeni rozdilu topne krivky</TD><TD>0002</TD><TD>0002</TD><TD>Heat curve coupling diff.</TD></TR>
+</TABLE>
+<I>Tab. 2 seznam systémových registrů (81|02 a 81|03) | Tab 2. list of system registers (81|02 and 81|03)</I><BR><BR>
+<TABLE border=1 frame=box>
+<TR><TH>Řádek</TH><TH>Rego600-635</TH><TH>Rego636-...</TH><TH>Line</TH></TR>
+
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD><TD></TD></TR>
+<TR><TD><I>Display</I></TD><TD></TD><TD></TD><TD><I>Display</I></TD></TR>
+<TR><TD>Časovač dotopu v sec.</TD><TD>0000</TD><TD>0000</TD><TD>Add heat timer in sec.</TD></TR>
+</TABLE>
+<I>Tab. 3 seznam časovačů (81|04 a 81|05) | Tab 3. list of timers (81|04 and 81|05)</I><BR><BR>
+
+<TABLE border=1 frame=box>
+<TR><TH>Řádek</TH><TH>Rego600-635</TH><TH>Rego636-...</TH><TH>Line</TH></TR>
+
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD><TD></TD></TR>
+<TR><TD><I>Display</I></TD><TD></TD><TD></TD><TD><I>Display</I></TD></TR>
+<TR><TD>Řádek 1 <SUP>* dlouhá data</SUP></TD><TD>0000</TD><TD>0000</TD><TD>Row 1 <SUP>* long data</SUP></TD></TR>
+<TR><TD>Řádek 2 <SUP>* dlouhá data</SUP></TD><TD>0001</TD><TD>0001</TD><TD>Row 2 <SUP>* long data</TD></TR>
+<TR><TD>Řádek 3 <SUP>* dlouhá data</SUP></TD><TD>0002</TD><TD>0002</TD><TD>Row 3 <SUP>* long data</TD></TR>
+<TR><TD>Řádek 4 <SUP>* dlouhá data</SUP></TD><TD>0003</TD><TD>0003</TD><TD>Row 4 <SUP>* long data</TD></TR>
+</TABLE>
+<I>Tab. 4 seznam řádek displeje (81|20) | Tab 4. list of display lines (81|20)</I><BR><BR>
+
+<TABLE border=1 frame=box>
+<TR><TH>Element</TH><TH>Rego600-635</TH><TH></TH><TH>Rego636-...</TH><TH>Element</TH></TR>
+
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD><TD></TD><TD></TD></TR>
+<TR><TD><I>LED</I></TD><TD></TD><TD></TD><TD></TD><TD><I>LED</I></TD></TR>
+<TR><TD>LED 1 napájení</TD><TD>?0012?</TD><TD><IMG SRC=pw_led.JPG></TD><TD>?0012?</TD><TD>LED 1 (power)</TD></TR>
+<TR><TD>LED 2 čerpadlo</TD><TD>0013</TD><TD><IMG SRC=hp_led.JPG></TD><TD>0013</TD><TD>LED 2 (pump)</TD></TR>
+<TR><TD>LED 3 ?dotop?</TD><TD>0014</TD><TD><IMG SRC=el_led.JPG></TD><TD>0014</TD><TD>LED 3 (?add heat?)</TD></TR>
+<TR><TD>LED 4 bojler</TD><TD>0015</TD><TD><IMG SRC=bo_led.JPG></TD><TD>0015</TD><TD>LED 4 (bojler)</TD></TR>
+<TR><TD>LED 5 alarm</TD><TD>0016</TD><TD><IMG SRC=al_led.JPG></TD><TD>0016</TD><TD>LED 5 (alarm)</TD></TR>
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD><TD></TD><TD></TD></TR>
+<TR><TD><I>Klávesnice</I></TD><TD></TD><TD></TD><TD></TD><TD><I>Keyboard</I></TD></TR>
+<TR><TD>Vypínač (Zap/Vyp)</TD><TD>0008</TD><TD></TD><TD>0008</TD><TD>Power (On/Off)</TD></TR>
+<TR><TD>Klávesa 1 (Teplo)</TD><TD>0009</TD><TD></TD><TD>0009</TD><TD>Key 1 (Temp)</TD></TR>
+<TR><TD>Klávesa 2 (Info)</TD><TD>000A</TD><TD></TD><TD>000A</TD><TD>Key 2 (Info)</TD></TR>
+<TR><TD>Klávesa 3 (Menu)</TD><TD>000B</TD><TD></TD><TD>000B</TD><TD>Key 3 (Menu)</TD></TR>
+<TR><TD>Kolečko</TD><TD>0044</TD><TD></TD><TD>??</TD><TD>Wheel</TD></TR>
+</TABLE>
+<I>Tab. 5 čekní panel (81|00 a 81|01) | Tab 5. front panel (81|00 and 81|01)</I><BR><BR>
+
+
+</TD>
+</TR>
+<TR>
+<TD>
+<H3>Data</H3>
+Hodnota pro zapsání do registru pro zápisové přkazy. V případě čtecích příkazů se odesílá 0000.<BR>
+Hodnota přečtená z registru v odpovědi.<BR><BR>
+<H3>Kontrolní součet(Checksum)</H3>
+Tato hodnota představuje exclusive-or (xor) ze znaků adresy registru a dat u pořadavku a z dat u odpovědi.
+<H3>Dlouhá data</H3>
+Existuje zvláštní paket odpovědi, který se posílá v případě čtení displaye.Jeho délka je 42 znaků.<BR>
+Tento paket se odesílá jako odpověď na pakety: 81|20|00|00|00|00|00|00|00 - 81|20|00|00|03|00|00|00|03.<BR>
+Tento paket obsahuje na prvním místě adresu cíle a následuje 20 dvojic znaků, které vyjadřují znaky na display. Dá se předpokládat, 
+že čerpadlo používá běžný řádkový display a proto jeho znaková sada bude odpovídat následujícímu obrázku.<BR>
+Znaky jsou kódovány jako čtyřbitové a to tak, že nejprve přijde sloupec a pak řádek. Pro běžné znaky je kódování stejné jako znaková 
+sada počítače, takže je možné dvojice sloučit a zobrazovat přímo.<BR><BR>
+<I>Příklad:</I><BR>
+Dostaneme paket: 01|05|02|06|05|06|07|06|0F|03|06...<BR>
+První znak je adresa cíle: 01=počítač<BR>
+Následující znaky můžeme sloučit do dvojic: 52|65|67|6F|36...<BR>
+A vypsat si je přímo jako znaky podle ascii tabulky: Rego6...<BR>
+(Poslední znak, který není zveřejněn je kontrolní součet, xor stejně jako v ostatních případech.)<BR>
+</TD>
+<TD>
+<H3>Data</H3>
+Value for writting into register for writting commands. In a case of read commands it is 0000.<BR>
+Value readed from register for responses.<BR><BR>
+<H3>Checksum</H3>
+This value representing exclusive-or (xor) of all characters of address and data in a request, or data in a response.
+<H3>Long data</H3>
+Exist special packet for response, which sending in a case of reading display. This packet is 42 character long.<BR>
+This packet sends especialy for requests: 81|20|00|00|00|00|00|00|00 - 81|20|00|00|03|00|00|00|03.<BR>
+First character contains destination addres, followed by 20 doubles of characters, presenting characters on display. It can be presumed,
+that pump using standard character LCD display. In that case character set of that display will be same as following image.<BR>
+Characters are coded as four bit pairs. First character informing about column, second about row of character. For standard characters 
+is encoding same as computer character table, in that case is possible to concat doubles and present it directly.<BR><BR>
+<I>Example:</I><BR>
+We will receive packet: 01|05|02|06|05|06|07|06|0F|03|06...<BR>
+First character representing destination: 01=computer<BR>
+Following characters can be concated by pairs: 52|65|67|6F|36...<BR>
+And display by standard ascii table: Rego6...<BR>
+(Last character is checksum, not shown in example, is checksum. Same xor as other packets.)<BR>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><A HREF="lcd-ch1a.gif" TARGET="lcd-ch1a"><IMG SRC="lcd-ch1a_s.GIF"></A><BR>
+<I>Obr. 5 Znaková sada displaye | Fig. 5 LCD character set</I>
+</TD>
+</TR>
+<TR>
+<TD>
+<H2>Klávesy</H2>
+Klávesy mají registry. Stisk klávesy se provede zapsáním "1" do jejich registru<BR>
+Nepříklad 81|01|00|00|09|00|00|01|08 znamená stisk levé klávesy (v klidovém stavu Info)<BR>
+Odpověď na klávesy je jednoznaková - vždy 01<BR><BR>
+Vyjímkutvoří kolečko. Otočení doprava znamená zápis "1", otočení doleva "1FFFFF"<BR>
+Nepříklad 81|01|00|00|44|00|00|01|45 -&gt;&gt<BR>
+Nepříklad 81|01|00|00|44|7F|7F|7F|3B &lt;&lt;-<BR><BR>
+<H2>Seznam poruch</H2>
+Pro ovládání seznamu poruch jsou jsou k dispozici dva příkazy: 40 a 42. Pokud zadáme příkaz 40 (81|40|00|00|00|00|00|00|00) dostaneme poslední 
+chybu zapsanou v registru chyb.<BR>
+Příkazem 42 (81|42|00|00|00|00|00|00|00) dostaneme chybu, která je v pořadí před tou, kterou jsme vypsali minule. To se vztahuje k opakovanému volání příkazu.<BR>
+Odpověď na tyto dotazy je formou dlouhého paketu (42 znaků), který se dekóduje stejně jako řádky displaye. Jenom některé znaky mají jiný význam:<BR>
+První znak má číselnou hodnotu, následuje 15 znaků datumu a času, a pak další 4 číselné znaky.<BR>
+První číslo znamená typ chyby (viz tabulka), třetí číslo je 0 pro korektní chybu. Pokud přečteme včechny chyby, dostaneme číslo chyby 255 a třetí číslo 150.<BR>
+Například:<BR>
+Log 40 =|22|090319 18:21:05|0|48|2|32|<BR>
+Log 42 =|10|090314 18:53:11|0|48|2|32|<BR>
+Log 42 =|22|090312 21:46:33|0|48|2|32|<BR>
+...<BR>
+Reg 42 =|255|0˙Ě:56:16|150|48|2|32|
+
+<BR><BR>
+</TD>
+<TD>
+<H2>Keyboard</H2>
+Each key have own register. Press of key mean write "1" into register<BR>
+For example 81|01|00|00|09|00|00|01|08 mean press of left key (in silence state Info)<BR>
+Response to key press are allways single charecter - allways 01<BR><BR>
+Difference is wheel. Turn to right mean write "1", turn to left mean "1FFFFF"<BR>
+For example 81|01|00|00|44|00|00|01|45 -&gt;&gt<BR>
+For example 81|01|00|00|44|7F|7F|7F|3B &lt;&lt;-<BR>
+<H2>Error log</H2>
+For managing error log is there two commands: 40 and 42. When we send command 40 (81|40|00|00|00|00|00|00|00) we will receive last known error
+stored in the registry.<BR>
+By sending command 42 (81|42|00|00|00|00|00|00|00) we will receive previous error. (repeeting this request we will receive prev-prev error.
+Response for this commands is long packet (42 chars), which may be decoded same way as display packet. Only some characters have special functions<BR>
+First character representing numeric value, next 15 characters representing date and time of error. And next is 4x numerich characters.<BR>
+First number reprezenting error number (see table), third number is 0 for correct record. When we read all records, we will receive line with error no 255 and third number 150.<BR>
+For example:<BR>
+Log 40 =|22|090319 18:21:05|0|48|2|32|<BR>
+Log 42 =|10|090314 18:53:11|0|48|2|32|<BR>
+Log 42 =|22|090312 21:46:33|0|48|2|32|<BR>
+...<BR>
+Reg 42 =|255|0˙Ě:56:16|150|48|2|32|
+<BR><BR>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER>
+<TABLE border=1 frame=box>
+<TR><TH>Chyba</TH><TH>#</TH><TH>Error</TH></TR>
+
+<TR><TD>&nbsp;</TD><TD></TD><TD></TD></TR>
+<TR><TD>Čidlo zpátečky (GT1)</TD><TD>0</TD><TD>Sensor radiator return (GT1)</TD></TR>
+<TR><TD>Venkovní čidlo (GT2)</TD><TD>1</TD><TD>Outdoor sensor (GT2)</TD></TR>
+<TR><TD>Čidlo TUV (GT3)</TD><TD>2</TD><TD>Sensor hot water (GT3)</TD></TR>
+<TR><TD>Čidlo směšovacího ventilu (GT4)</TD><TD>3</TD><TD>Mixing valve sensor (GT4)</TD></TR>
+<TR><TD>Pokojové čidlo (GT5)</TD><TD>4</TD><TD>Room sensor (GT5)</TD></TR>
+<TR><TD>Čidlo kompresoru(GT6)</TD><TD>5</TD><TD>Sensor compressor (GT6)</TD></TR>
+<TR><TD>Čidlo teplý okruh výstup (GT8)</TD><TD>6</TD><TD>Sensor heat tran fluid out (GT8)</TD></TR>
+<TR><TD>Čidlo teplý okruh vstup (GT9)</TD><TD>7</TD><TD>Sensor heat tran fluid in (GT9)</TD></TR>
+<TR><TD>Čidlo studený okruh vstup (GT10)</TD><TD>8</TD><TD>Sensor cold tran fluid in (GT10)</TD></TR>
+<TR><TD>Čidlo studený okruh výstup (GT11)</TD><TD>9</TD><TD>Sensor cold tran fluid in (GT11)</TD></TR>
+<TR><TD>Ochrana motoru kompresoru (MB1)</TD><TD>10</TD><TD>Compresor circuit switch</TD></TR>
+<TR><TD>Elektrokotel (EK)</TD><TD>11</TD><TD>Electrical cassette</TD></TR>
+<TR><TD>Ochrana motoru studeného čerpadla (MB2)</TD><TD>12</TD><TD>HTF C=pump switch (MB2)</TD></TR>
+<TR><TD>Presostat nízkotlaký (LP)</TD><TD>13</TD><TD>Low pressure switch (LP)</TD></TR>
+<TR><TD>Presostat vysokotlaký (HP)</TD><TD>14</TD><TD>High pressure switch (HP)</TD></TR>
+<TR><TD>Vysoká teplota zpátečky (GT9)</TD><TD>15</TD><TD>High return HP (GT9)</TD></TR>
+<TR><TD>Vysoká teplota výstupu (GT8)</TD><TD>16</TD><TD>HTF out max (GT8)</TD></TR>
+<TR><TD>Nízká teplota vstupu st. okruhu (GT10)</TD><TD>17</TD><TD>HTF in under limit (GT10)</TD></TR>
+<TR><TD>Nízká teplota výstupu st. okruhu (GT11)</TD><TD>18</TD><TD>HTF out under limit (GT11)</TD></TR>
+<TR><TD>Přehřátí kompresoru (GT6)</TD><TD>19</TD><TD>Compressor superhear (GT6)</TD></TR>
+<TR><TD>Chyba sledu fází</TD><TD>20</TD><TD>3-phase incorrect order</TD></TR>
+<TR><TD>Závada na napájení</TD><TD>21</TD><TD>Power failure</TD></TR>
+<TR><TD>Vysoká delta KPT (GT8/GT9)</TD><TD>22</TD><TD>Varmetr. delta hoch</TD></TR>
+<TR><TD>...</TD><TD></TD><TD>...<TD></TR>
+</TABLE>
+<I>Tab. 6 seznam chyb (pro model Greenline)| Tab 6. List of errors (for Greenline series)</I><BR><BR>
+
+</TD>
+</TR>
+<TR>
+<TD>
+
+<H2>Čemu nerozumím</H2>
+Jaké je mapování kolečka na 636???<BR>
+Existuje detailnější popis registrů?<BR>
+Popis registrů zařízení?<BR>
+Řídící jednotka komunikuje i ve vypnutém stavu. (Když bliká power led) Dá se na dálku zapnout?<BR>
+Kde jsou uloženy bezpečnostních hodnoty (maximální teplota, maximální delta KPT,...)<BR>
+Kde (a jak) jsou uloženy hodnoty časovačů (pro režim dovolená? pro časové řízení?)<BR>
+</TD>
+<TD>
+<H2>Open questions</H2>
+What is wheel mapping on 636???<BR>
+Exist detailed list of registers?<BR>
+Keys have single character response?<BR>
+Control unit responding also in standby state. (when power led blinking) Is it possible to switch pump on?<BR>
+Where are stored security limits (maximum temp, maximum HTF c-pump switch [Motorskydd KB.pump])?<BR>
+Where (and what) is stored information about timers (for holiday mode, for clock setting)<BR>
+</TD>
+</TR>
+<TR>
+<TD>
+<H2>Příklad</H2>
+Praktická funkčnost se dá vyzkoušet například na <A HREF="http://wifi.nekropolis.cz/cgi-bin/grapher.cgi?target=%2FIVT">grafech teplot</A> z mého tepelného čerpadla. Jedná se o čerpadlo IVT Greenline C6+ s řízením Rego636.
+<H2>Download</H2>
+Všechny své programové pokusy tvořím v jednom souboru. Tento soubor je zatím bohužel jen snůškou poznámek a funkcí.<BR>
+Aktuální verzi je možné si stáhnout <A HREF="http://wifi.nekropolis.cz/cgi-bin/get_snapshot_of_ivt.pl.cgi/ivt.pl">ZDE</A><BR>
+(jedná se o pracovní verzi a jestliže jí právě edituji, pak v ní mohou být i chyby. Pokud narazíte na chybu, stáhněte si jej znovu za párminut.)<BR>
+<H2>Poznámka</H2>
+Tento dokument vzniká jako moje poznámky. Velice rád si přečtu jakýkoli komentář. Pokud máte nějaké informace, nebo dotazy, pošlete mi email.<BR>
+</TD>
+<TD>
+<H2>Example</H2>
+Practical example can be tested on <A HREF="http://wifi.nekropolis.cz/cgi-bin/grapher.cgi?target=%2FIVT">temperature graphs</A> from my heatpump. It is heat pump IVT Greenline C6+ with Rego636.
+<H2>Download</H2>
+All my programming tests I'm doing in one file. This file is still set of notes and functions<BR>
+It can be downloaded <A HREF="http://wifi.nekropolis.cz/cgi-bin/get_snapshot_of_ivt.pl.cgi/ivt.pl">HERE</A><BR>
+(It is working snapshot and is possible that I§m editing it and is there some bugs. If found, download again in few minutes.)<BR>
+<H2>Note</H2>
+This document is created as my notes. I would like to read any comments. If you have any knowledge, questions, remarks, send me email.<BR>
+</TD>
+</TR>
+</TABLE>
+<BR>
+<IMG SRC="/podpis.GIF"  ID="LIC"><BR><BR>
+<TABLE ID="WIN">
+<TR>
+<TD>
+<H2>Program pro Windows</H2>
+Protože větší množství lidí nechce chápat tuto stránku jako dokumentaci, přistoupil jsem na vytvoření ukázkového programu pro Windows. Tento program je příkladem toho, jak lze dokumentaci použít a neslouží jako finální produkt.<BR>
+Program je vytvořen v Borland Delphi 5, ale myslím, že v jakémkoli jiném visuálním nástroji bude vypadat podobně.
+</TD>
+<TD>
+<H2>Software for Windows</H2>
+Becouse many of people do not want to understand this page as a documentation and framework; I have created example program for windows. This program is example of using this documentation and not an final product.<BR>
+Program is developed in Borland Delphi 5; I belive, that it will be similar in any other visual tool.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER>
+<A HREF="rego600.zip"><IMG SRC="winlogo.JPG"><BR>rego600.zip 392.3KB</A>
+</TD>
+</TR>
+</TABLE><BR><BR>
+<B>License:</B> This document can be used "as-is", if there will be copied or used any parts, document must be described in a list of information source.
+There must be presented valid link to document. If used for electronic document, the link must be active and clickable.<BR>
+This document is distributed as <B>postcardware</B>. It mean, that you MUST send a paper postcard to authors s-mail address: Jindřich Fučík; Přátelství 60; Praha - Uhříněves; 104 00; Czech Republic<BR>
+If you are a company, and planing to use it in your business, you MUST send also a box full of your marketing materials and advertising items.<BR><BR>
+<B>Licence:</B> Dokument může být používán tak jak je, pokud jsou některé části kopírovány nebo používany, dokument musí být označeny v seznamu zdrojů informací.
+Při kopírování musí být uvaden spravný odkaz na dokument. V případě použití v elektronických dokumentech musí být odkaz aktivní a klikatelný.<BR>
+Tento dokument je poskytován jako <B>postcardware</B>. To znamená, že pokud jej chcete použít, MUSÍTE poslat papírovou pohlednici na autorovu adresu: Jindřich Fučík; Přátelství 60; Praha - Uhříněves; 104 00<BR>
+Pokud jste firma a hodláte dokument použít k výdělečné činnosti, MUSÍTE poslat ještě škatuli marketingových a reklamních předmětů.<BR>
+<A HREF=postcards>List of received postcards; Seznam přijatých pohlednic</A><BR><BR>
+<IMG SRC="http://wifi.nekropolis.cz/cgi-bin/mini-graph.cgi?type=png;target=%2FIVT%2Fuhrineves;dslist=gt1targ%2Cgt1on%2Cgt1off%2Cgt3targ%2Cgt3on%2Cgt3off%2CgroundP3%2Ccompresor%2Caddheat3kw%2Caddheat6kw%2CradP1%2CheatP2%2CVXV%2CAlarm%2Czpatecka%2Cvenkovni%2Cbojler%2Ckompresor%2CteplyO%2CteplyI%2CstudenyI%2CstudenyO;range=86400;rand=263">
+<IMG SRC="http://wifi.nekropolis.cz/cgi-bin/geosf.pl">
+</BODY>
+</HTML>

@@ -1,0 +1,274 @@
+<HTML>
+<HEAD>
+<TITLE>
+Připojení tepelného čerpadla s řízením Rego 6xx k počítači
+</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1250" />
+</HEAD>
+<BODY>
+<TABLE>
+<TR>
+<TD>
+<H1>Jak připojit tepelné čerpadlo s řízením Rego 6xx k počítači</H1>
+Často kladené otázky
+</TD>
+<TD>
+<H1>How to connect heat pump with Rego 6xx controller to a computer</H1>
+Frequently Asked Questions
+</TD>
+</TR>
+<TR>
+<TD>
+<H2>Obsah</H2>
+<UL>
+<LI><A HREF="#HW">Hardware</A><BR>
+<LI><A HREF="#SW">Software</A><BR>
+<LI><A HREF="#WIN">Windows Software</A><BR>
+</UL>
+<BR>Registrováno jako projekt na <A HREF="https://sourceforge.net/projects/rago600/">SourceForge.net</A>
+</TD>
+<TD>
+<H2>Index</H2>
+<UL>
+<LI><A HREF="#HW">Hardware</A><BR>
+<LI><A HREF="#SW">Software</A><BR>
+<LI><A HREF="#WIN">Windows Software</A><BR>
+</UL>
+<BR>Registered as <A HREF="https://sourceforge.net/projects/rago600/">SourceForge.net</A> project
+</TD>
+</TR>
+</TABLE>
+<TABLE ID=HW>
+<TR>
+<TD>
+<H2>Hardware</H2>
+</TD>
+<TD>
+<H2>Hardware</H2>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Je bezpečné experimentovat se systémovým rozhraním rego?</B><BR>
+<B>A:</B> NE! Systémové rozhraní nemá žádnou ochranu proti zkratu nebo nevhodným elektrickým stavům. Při špatné manipulaci může dojít k poškození celého procesoru.<BR>
+Všechny experimenty provádíte na svoje vlastní riziko a nevztahuje se na ně záruka IVT.
+</TD>
+<TD>
+<B>Q: Is it safe to do experiments with system interface on rego?</B><BR>
+<B>A:</B> NO! System interface have no protection for wrong electrical conection and wrong voltages. It is possible to destroy all rego processor during wrong manipulation of interface.<BR>
+All that experiments you are doing on your own risk and it is not covered by IVT guarantee.
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Jaké zařízení je nejjednodušší na stavbu?</B><BR>
+<B>A:</B> Pro začátečníka určitě zařízení pro přímé připojení k <A HREF´"http://rago600.sourceforge.net/ivt_serial.pdf">sériovému portu</A>. (viz Obr 1)
+</TD>
+<TD>
+<B>Q: What is most simple device to made?</B><BR>
+<B>A:</B> For begginers definitly direct connection to <A HREF´"http://rago600.sourceforge.net/ivt_serial.pdf">serial port</A>. (see Fig 1.)
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Kde je možné koupit hotové zařízení?</B><BR>
+<B>A:</B> Nikde. Tato stránka je návodem a ne prodejním katalogem
+</TD>
+<TD>
+<B>Q: Where is possible to buy assambled device?</B><BR>
+<B>A:</B> Nowhere. This page is manual not sale page.
+</TD>
+</TR>
+<TR ID=PD>
+<TD>
+<B>Q: Existuje nějaký výrobce?</B><BR>
+<B>A:</B> Po dlouhé době se mi podařilo přesvědčit kamaráda Pavla Dvořáka (<IMG ALIGN=middle SRC="dvorak.GIF">), který je ochoten vyrábět kusové množství za odpovídající cenu. Kontaktujte jej přímo
+</TD>
+<TD>
+<B>Q: Exist some manufacturer?</B><BR>
+<B>A:</B> Finally I persuade my friend Pavel Dvořák (<IMG ALIGN=middle SRC="dvorak.GIF">) to help you to prepare small number of interfaces for individual usage. Contact Pavel directly.
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Je možné sepsat komponenty potřebné pro stavbu?</B><BR>
+<B>A:</B> Ano, doplním i skladová čísla pro hlavní prodejce součástek. <A HREF="http://www.gme.cz/">GM electronic</A> pro českou republiku, <A HREF="http://www.elfa.se/">Elfa</A> pro Švédsko, <A HREF="http://www.farnell.com">Farnell</A> pro ostatní.
+</TD>
+<TD>
+<B>Q: Is it possible to create list of material need for build?</B><BR>
+<B>A:</B> Yes, I will also add stock numbers for main electronic parts shops. <A HREF="http://www.gme.cz/">GM electronic</A> for Czech, <A HREF="http://www.elfa.se/">Elfa</A> for Sweden, <A HREF="http://www.farnell.com">Farnell</A> for rest.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER><TABLE border=1 frame=box>
+<TR><TH>C</TH><TH>GMe</TH><TH>Elfa</TH><TH>Farnell</TH><TH>Name</TH></TR>
+<TR><TD>1</TD><TD>433-100<BR>329-036</TD><TD>73-023-26</TD><TD>9725172 <BR>1648737</TD><TD>MAX232CPE RS232-transceiver DIL16</TD></TR>
+<TR><TD>1</TD><TD>801-036</TD><TD>44-171-01</TD><TD>1084684</TD><TD>D-Sub male 9p solder</TD></TR>
+<TR><TD>1</TD><TD>801-040</TD><TD>44-171-19</TD><TD>1084692</TD><TD>D-Sub female 9p solder</TD></TR>
+<TR><TD>1</TD><TD>961-035</TD><TD>75-363-60</TD><TD>1469491</TD><TD>MCT6 opto coupler DIL8<BR>(ILD2 opto coupler DIL8)</TD></TR>
+<TR><TD>1</TD><TD>110-065</TD><TD>60-719-06</TD><TD></TD><TD>Resistor 470ohm 1% 0,6W</TD></TR>
+<TR><TD>1</TD><TD>110-042</TD><TD>60-708-09</TD><TD></TD><TD>Resistor 51,0ohm 1% 0,6W</TD></TR>
+<TR><TD>2</TD><TD>110-073</TD><TD>60-722-84</TD><TD></TD><TD>Resistor 1,00kohm 1% 0,6W</TD></TR>
+<TR><TD>1</TD><TD>110-097</TD><TD>60-734-23</TD><TD></TD><TD>Resistor 10,0kohm 1% 0,6W</TD></TR>
+<TR><TD>4</TD><TD>123-048</TD><TD>67-008-01</TD><TD></TD><TD>Rad.el.cap. 10uF/25V 2mm</TD></TR>
+<TR><TD>1</TD><TD>661-088</TD><TD>48-388-35</TD><TD>1172108 </TD><TD>Universal PCB (Experimental board)</TD></TR>
+<TR><TD>1<sup>*</sup></TD><TD>832-174<BR>+ 840-014</TD><TD>42-709-22</TD><TD></TD><TD>Plug USB type A</TD></TR>
+</TABLE>
+</TD>
+</TR>
+<TR>
+<TD>
+<sup>*</sup> Mnohem praktičtější je použít kabel ze staré myši nebo nějaký starý USB propojovací kabel. Práce s konektory není moc dobrá. Pokud odstřihnete starý kabel, použijte červený vodič.<BR><BR>
+</TD>
+<TD>
+<sup>*</sup> It is more practical to use cable from old mouse or any other old USD cable. Work with plugs is not confortable. If you will use old cable, the requested wire is red.<BR><BR>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Jak má vypadat hotové zařízení?</B><BR>
+<B>A:</B> Začítečnický model zhruba jako je na tomto obrázku.<BR>
+Pravá strana se připojuje do čerpadla, vlevo je kabel k počítačovým konektorům.
+</TD>
+<TD>
+<B>Q: How may final device looklike?</B><BR>
+<B>A:</B> Begginer version is presented on following picture.<BR>
+Right hand side to heatpump, left hand cable to computer plugs.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER>
+<IMG SRC=ivt_serial_v1.JPG>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Nerozumím elektrotechnickým schématům, Existují nějaká mnemotechnická?</B><BR>
+<B>A:</B> V zásadě se dá nakreslit mnemotechnické schéma.<BR>
+Ale je to značně neprofesionální
+</TD>
+<TD>
+<B>Q: I'm not understand schematics, is it possible to draw some mnemotechnic?</B><BR>
+<B>A:</B> It is possible to say yes.<BR>
+But it is not professional.
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 ALIGN=CENTER>
+<A HREF="ivt_ser2a.GIF" target="ivt_ser2a"><IMG SRC=ivt_ser2a_sm.GIF></A><BR>
+<A HREF="ivt_ser2.pdf" TARGET="ivt_ser2a"><IMG SRC="pdf.gif"></A><BR>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Existují ještě jiné možnosti připojení?</B><BR>
+<B>A:</B> Ano, provedl jsem několik úspěšných experimentů s dalšími rozhraními, ale z různých důvodů jsem je zamítl:
+<UL><LI><B>USB</B> je jednoduché vyrobit plně USB rozhraní, ušetří se tím jeden obsazený port v počítači. Bohužel maximální délka USB kabelu je cca 5m a to mi nedostačovalo. (lze použít <A HREF="http://www.recursion.jp/avrcdc/">AVR CDC</A>, nebo <A HREF="http://www.ftdichip.com/FTProducts.htm#FT232R">FTDI</A>)
+<LI><B>Bluetooth</B> bohužel neprochází železobetonem, takže je problém se stropní konstrukcí a dalšími částmi staveb (použil jsem moduly <A HREF="http://www.connectblue.se/products/bluetooth-products/bluetooth-oem-modules/">connectBlue</A>)
+<LI><B>WiFi</B> rádiová část WiFi a Bluetooth je identická, pro WiFi je potřeba provádět náročnější párování. Proto jsem použil WiFi anténu pro Bluetooth.
+<LI><B>Ethernet</B> existují hotové moduly, ale nemám v technické místnosti zásuvku ethernetu, takže jsem s nimi neexperimentoval.
+</UL>
+</TD>
+<TD>
+<B>Q: Is there are available other connection methods?</B><BR>
+<B>A:</B> Yes; I have done few succes experiments with other interfaces, which working fine, but I skipped it from various reasons:
+<UL><LI><B>USB</B> It is easy to done full USB device. It will keep one USB port free. Problem is, that maximum length of USB cable is aprox 5m and it is not enought. (I have tested <A HREF="http://www.recursion.jp/avrcdc/">AVR CDC</A>, and <A HREF="http://www.ftdichip.com/FTProducts.htm#FT232R">FTDI</A>)
+<LI><B>Bluetooth</B> Problem of Bluetooth is, that it not passing armoured concrete. It mean that there are problem with roof constructions and other engineering constructions. (I have tested modules <A HREF="http://www.connectblue.se/products/bluetooth-products/bluetooth-oem-modules/">connectBlue</A>)
+<LI><B>WiFi</B> radio part of Wifi is same as Bluetooth. Because there are more strict rules for pairing connections, I skipped this experiments and use WiFi anthenas with Bluetooth modules.
+<LI><B>Ethernet</B> There are exist few finished modules for using ethernet. Because I have not ethernet infrastructure in my technical room; I skipped experiments with this.
+</UL>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: S jakými tepelnými čerpadly zařízení funguje?</B><BR>
+<B>A:</B> Podle mojich informací zhruba:
+<UL><LI>IVT série Greenline
+<LI>IVT Optima osazená Rego 603 
+<LI>Auto Term C Max 40x, 30x E Max a TerraMax
+<LI>Carrier 30NQC, NQ, Heat 60, New Heat 60 
+<LI>Bosch EHP EHP LW and LW / M
+</UL>
+Rozhraní pracuje pouze s <B>Rego 6xx verze 2.24 a novějšími</B>, tyto byly vyráběny zhruba od roku 2002-2003, s novějšími verzemi nejsou problémy<BR><BR>
+
+Ke zjištění verze stačí držet prostřední klávesu po dobu několika sekund. Pokud nedostanete informaci o verzi, je vaše Rego příliš staré.<BR>
+Také se můžete podívat na štítek na vašem Rego. Například: "xx-224-xxxxxx" znamená verzi 2.24<BR>
+</TD>
+<TD>
+<B>Q: What heat pumps working with this interface?</B><BR>
+<B>A:</B> I have information aprox about that models:
+<UL><LI>IVT Greenline series 
+<LI>IVT Optima with Rego 603 
+<LI>Auto Term C Max 40x, 30x E Max and TerraMax
+<LI>Carrier 30NQC, NQ, Heat 60, New Heat 60 
+<LI>Bosch EHP EHP LW and LW / M
+</UL>
+The interface works only on <B>Rego 6xx version 2.24 and later</B> and these were made around 2002-2003 as newer pumps are no problems.<BR><BR>
+
+To obtain version nummret keep pressed the middle menu button for a few seconds.
+If you do not get the version number of the above ways you have too old Rego. <BR>
+You can also read text from the label on your rego-box. For exemple, "xx-224-xxxxxx"  means version 2.24. <BR>
+</TD>
+</TR>
+
+</TABLE><BR><BR>
+<TABLE ID=SW>
+<TR>
+<TD>
+<H2>Software</H2>
+</TD>
+<TD>
+<H2>Software</H2>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Mohu použít software Statlink nebo IVT@Home?</B><BR>
+<B>A:</B> Z licenčního pohledu je nutné zaplatit licenci za tyto produkty i v případě, že si vyrobíte vlastní interface.<BR>
+Z technického pohledu je přímé sériové zařízení schodné pro všechny druhy software. Ostatní zařízení mohou vytvářet větší zpoždění než očekává StatLink a může u něj docházet k chybám.
+</TD>
+<TD>
+<B>Q: Is it possible to use software StatLink or IVT@Home?</B><BR>
+<B>A:</B> From license point of view it is necessary to pay license for this products also when you are using own interface.<BR>
+From technical point of view is direct serial interface same for all listed softwares. Other interfaces can have longer responses than StatLink expect and it can make some errors.
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Potřebuji zvláštní počítač s linuxem?</B><BR>
+<B>A:</B> Ne, lze provozovat i na windows. Na druhou stranu stojí za zvážení použití alternativních zažízení která umožňují provozovat linux, jako například router <A HREF="http://www.linux-mips.org/wiki/BR6104">BR6104KP</A>, <A HREF="http://www.linux-mips.org/wiki/Adm5120">Adm5120</A> .
+Nebo například <A HREF="http://oldwiki.openwrt.org/TableOfHardware.html">OpenWRT</A> zařízení. Dokonce není nutné se držet ani hlavních směrů, moje zařízení pracuje s operačním systémem <A HREF="http://www.freebsd.cz/">FreeBSD</A>.
+</TD>
+<TD>
+<B>Q: Is it necessary to use new linux box?</B><BR>
+<B>A:</B> No, it is possible to use windows. From the other hand you can also use alternative devices running linux. For example routers <A HREF="http://www.linux-mips.org/wiki/BR6104">BR6104KP</A>, <A HREF="http://www.linux-mips.org/wiki/Adm5120">Adm5120</A> .
+Or for example <A HREF="http://oldwiki.openwrt.org/TableOfHardware.html">OpenWRT</A> devices. Also it is no necessary to use main stream operating systems, my device using <A HREF="http://www.freebsd.org/">FreeBSD</A> operating system.
+</TD>
+</TR>
+</TABLE><BR><BR>
+<TABLE ID=WIN>
+<TR>
+<TD>
+<H2>Windows</H2>
+</TD>
+<TD>
+<H2>Windows</H2>
+</TD>
+</TR>
+<TR>
+<TD>
+<B>Q: Je možné k windows programu doplnit nějakou funkcionalitu?</B><BR>
+<B>A:</B> Momentálně ne. Vzhledem k tomu, že jsem program napsal za jednu sobotu a windows nepovažuji za platformu vhodnou pro toto použití, nehodlám se k němu vracet.<BR>
+Pokud se najde někdo, kdo bude ochoten programovat pro windows, můžeme se domluvit na předání zdrojáků.
+</TD>
+<TD>
+<B>Q: Is it possible to add some functionality?</B><BR>
+<B>A:</B> Not at that time. Because I have written that program during one Saturday; and becouse I not understand that windows is operating system for that type of application; I do not want to return to that programming.<BR>
+If there will be somebody, who is able to programing using windows, it is possible to transfer source codes.
+</TD>
+</TR>
+</TABLE><BR>
+<IMG SRC="/podpis.GIF"><BR><BR>
+<IMG SRC="http://wifi.nekropolis.cz/cgi-bin/geosf.pl">
+</BODY>
+</HTML>
