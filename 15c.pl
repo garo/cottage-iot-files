@@ -417,11 +417,11 @@ if ($valid) {print "Indoor temp setting 21=$value\n"} else {print "Error getting
 CmdWriteTemp(hex('81'), hex('03'), hex('2B'), 450); # original: 510
 CmdWriteTemp(hex('81'), hex('03'), hex('21'), 130); # original: 218
 
-CmdWriteTemp(hex('81'), hex('03'), hex('00'), 25); # original: 55, temp curve
+CmdWriteTemp(hex('81'), hex('03'), hex('00'), 27); # original: 55, temp curve
 
-CmdWriteTemp(hex('81'), hex('03'), hex('01'), -30); # original: 1, temp fine adjust
+CmdWriteTemp(hex('81'), hex('03'), hex('01'), -18); # original: 1, temp fine adjust
 
-CmdWriteTemp(hex('81'), hex('03'), hex('22'), 1); # original: 5 aka 50%, indoor temp influences heating
+CmdWriteTemp(hex('81'), hex('03'), hex('22'), 30); # original: 5 aka 50%, indoor temp influences heating
 
 ($valid,$value)=CmdRespTemp(hex('81'),hex('02'),hex('6C'),0);
 if ($valid) {print "Add heat power in % value 0x6C=$value\n"} else {print "Error getting setting 6C temp:$value\n"}

@@ -11,15 +11,9 @@
 
 use strict;
 
-
 #my $port=( $^O =~ /Win/io ) ? 'COM7' : '/dev/ttyUSB3';
-
 my $port = "/dev/" . `ls /sys/bus/usb-serial/drivers/cp210x |grep tty`;
 chomp($port);
-
-
-print "using tty $port\n";
-
 my $PortObj;
 
 sub portconnect {
@@ -32,7 +26,6 @@ if( $^O =~ /Win/io ) {
 } else {
 	$PortObj = new Device::SerialPort($port, $quiet, $Lock_File_Name);
 }
-print "portobj: " . $PortObj;
 $PortObj->handshake("none");           # set parameter
 $PortObj->baudrate(19200);
 $PortObj->parity("none");
@@ -260,20 +253,46 @@ sub CmdRespTemp ($$$$) {# prepare values (array) for sending
     my $retrys = 0;
     my $done = 0;
     my $results = "";
-#    mylog("address: ", $addr);
-#    mylog("cmd: ", $cmd);
-#    mylog("reg: ", $reg);
-#    mylog("val: ", $val);
-#    mylog("Source: ",@data);
-    do {	
+    mylog("CmdRespTemp");
+    mylog("address: ", $addr);
+    mylog("cmd: ", $cmd);
+    mylog("reg: ", $reg);
+    mylog("val: ", $val);
+    mylog("Source: ",@data);
+   do {	
      cmdsend(@data);
      ($invalid, $value) = ReadVal;
-#     print "V:$invalid $value\n";
+     print "V:$invalid $value\n";
      if ($invalid) {$results.=$invalid;}
      if (!$invalid) {$done=1};
      if ($invalid) {if ($retrys++>=5) {$done=1;}};
     } while (!$done);
    if (!$invalid) {return (1,0.1 * $value)} else {return (0,$results)};
+}
+
+sub CmdWriteTemp($$$$) {
+    my $addr = shift;
+    my $cmd  = shift;
+    my $reg  = shift;
+    my $val  = shift;
+    my @data = num2read($addr,$cmd,$reg,$val);
+    my $invalid;
+    my $value;
+    my $retrys = 0;
+    my $done = 0;
+    my $results = "";
+    mylog("CmdWriteTemp");
+    mylog("address: ", $addr);
+    mylog("cmd: ", $cmd);
+    mylog("reg: ", $reg);
+    mylog("val: ", $val);
+    mylog("Source: ",@data);
+
+    cmdsend(@data);
+    ($invalid, $value) = ReadKeyVal;
+    mylog("invalid: $invalid, value: $value");
+    if (!$invalid) {return (1,$value)} else {return (0,$invalid)};
+
 }
 
 sub CmdRespVal ($$$$) {# prepare values (array) for sending
@@ -343,48 +362,14 @@ sub CmdRespKey ($$$$) {# prepare values (array) for sending
 
 }
 
-sub CmdWriteTemp($$$$) {
-    my $addr = shift;
-    my $cmd  = shift;
-    my $reg  = shift;
-    my $val  = shift;
-    my @data = num2read($addr,$cmd,$reg,$val);
-    my $invalid;
-    my $value;
-    my $retrys = 0;
-    my $done = 0;
-    my $results = "";
-    mylog("CmdWriteTemp");
-    mylog("address: ", $addr);
-    mylog("cmd: ", $cmd);
-    mylog("reg: ", $reg);
-    mylog("val: ", $val);
-    mylog("Source: ",@data);
-
-    cmdsend(@data);
-    ($invalid, $value) = ReadKeyVal;
-    mylog("invalid: $invalid, value: $value");
-    if (!$invalid) {return (1,$value)} else {return (0,$invalid)};
-
-}
-
-
 sub handleTemp {
     my $register = shift;
     my $name = shift;
     my $key = shift;
 
     my ($valid, $value) = CmdRespTemp(0x81, 0x02, $register, 0);
-    if ($valid && $value eq "-48.3") {
-	$valid = 0;
-    }
     if ($valid) {
 	printf("%s (0x%.02X) = %s\n", $name, $register, $value);
-	if ($key ne "") {
-	    my $cmd = "zabbix_sender -z ubuntu.juhonkoti.net -s nest -k ivt.$key -o $value";
-	    `$cmd`;
-	}
-	return $value;
     } else {
 	printf("Error when obtaining $name (0x%.02X)\n", $name, $register);
     }
@@ -398,10 +383,6 @@ sub handleValue{
     my ($valid, $value) = CmdRespVal(0x81, 0x02, $register, 0);
     if ($valid) {
 	printf("%s (0x%.02X) = %s\n", $name, $register, $value);
-	if ($key ne "") {
-	    my $cmd = "zabbix_sender -z ubuntu.juhonkoti.net -s nest -k ivt.$key -o $value";
-	    `$cmd`;
-	}
     } else {
 	printf("Error when obtaining $name (0x%.02X)\n", $name, $register);
     }
@@ -415,10 +396,6 @@ sub handleTimer {
     my ($valid, $value) = CmdRespVal(0x81, 0x04, $register, 0);
     if ($valid) {
 	printf("%s (0x%.02X) = %s\n", $name, $register, $value);
-	if ($key ne "") {
-	    my $cmd = "zabbix_sender -z ubuntu.juhonkoti.net -s nest -k ivt.$key -o $value";
-	    `$cmd`;
-	}
     } else {
 	printf("Error when obtaining $name (0x%.02X)\n", $name, $register);
     }
@@ -429,97 +406,31 @@ my $valid;
 my $value;
 my $datum = localtime(time);
 
-################################
-# Hmm, that is working -> comented out because I'm debuging not working parts
-################################
-
-my $gt1_current_value = handleTemp(0x0209, "Radiator return [GT1]", "radiator_return_gt1");
-handleTemp(0x020A, "Outdoor [GT2]", "outdoor_gt2");
-handleTemp(0x020B, "Hot water [GT3]", "hot_water_gt3");
-handleTemp(0x020C, "Forward [GT4]", "forward_gt4");
-handleTemp(0x020D, "Room [GT5]", "room_gt5");
-handleTemp(0x020E, "Compressor [GT6]", "compressor_gt6");
-handleTemp(0x020F, "Heat fluid out [GT8]", "heat_fluid_out_gt8");
-handleTemp(0x0210, "Heat fluid in [GT9]", "heat_fluid_in_gt9");
-handleTemp(0x0211, "Cold fluid in [GT10]", "cold_fluid_in_gt10");
-handleTemp(0x0212, "Cold fluid out [GT11]", "cold_fluid_out_gt11");
-#handleTemp(0x0213, "External hot water [GT3x]", "external_hot_water_gt3x");
-
-handleValue(0x01FD, "Ground loop pump [P3]", "ground_loop_pump_p3");
-handleValue(0x01FE, "Compresor", "compressor");
-handleValue(0x01FF, "Additional heat 3kW", "additional_heat_3kw");
-handleValue(0x0200, "Additional heat 6kW", "additional_heat_6kw");
-handleValue(0x0203, "Radiator pump [P1]", "radiator_pump_p1");
-handleValue(0x0204, "Heat carrier pump [P2]", "heat_carrier_pump_p2");
-handleValue(0x0205, "Three-way valve [VXV]", "three_way_valve");
-handleValue(0x0206, "Alarm", "alarm");
-
-my $gt1_target_value = handleTemp(0x006E, "GT1 Target value", "gt1_target_value");
-handleTemp(0x006F, "GT1 On value", "gt1_on_value");
-handleTemp(0x0070, "GT1 Off value", "gt1_off_value");
-handleTemp(0x002B, "GT3 Target value", "gt3_target_value");
-handleTemp(0x0073, "GT3 On value", "gt3_on_value");
-handleTemp(0x0074, "GT3 Off value", "gt3_off_value");
-handleTemp(0x006D, "GT4 Target value", "gt4_target_value");
-handleTemp(0x006C, "Add heat power in %", "add_heat_power_in_percent");
-
-handleTemp(0x0000, "Heat curve", "heat_curve");
-my $fine_adj = handleTemp(0x0001, "Heat curve find adj", "heat_curve_fine_adj");
-my $indoor_temp_setting = handleTemp(0x0021, "Indoor temp setting", "indoor_temp_setting");
-handleTemp(0x0022, "Curve infl. by in-temp.", "");
-handleTemp(0x001E, "Adj. curve at 20' out", "");
-handleTemp(0x001C, "Adj. curve at 15' out", "");
-handleTemp(0x001A, "Adj. curve at 10' out", "");
-handleTemp(0x0018, "Adj. curve at 5' out", "");
-handleTemp(0x0016, "Adj. curve at 0' out", "");
-handleTemp(0x0014, "Adj. curve at -5' out", "");
-handleTemp(0x0012, "Adj. curve at -10' out", "");
-handleTemp(0x0010, "Adj. curve at -15' out", "");
-handleTemp(0x000E, "Adj. curve at -20' out", "");
-handleTemp(0x000C, "Adj. curve at -25' out", "");
-handleTemp(0x000A, "Adj. curve at -30' out", "");
-handleTemp(0x0008, "Adj. curve at -35' out", "");
-handleTemp(0x0002, "Heat curve coupling diff.", "");
-
-handleTimer(0x0000, "Add heat timer in sec.", "add_heat_time_in_sec");
 
 
-$gt1_target_value = int($gt1_target_value * 10.0);
-$gt1_current_value = int($gt1_current_value * 10.0);
-$indoor_temp_setting = int($indoor_temp_setting * 10.0);
-$fine_adj = int($fine_adj * 10.0);
+($valid,$value)=CmdRespTemp(hex('81'),hex('02'),hex('2B'),0);
+if ($valid) {print "GT3 Target value 2B=$value\n"} else {print "Error getting hot water GT3 target temp :$value\n"}
 
-printf("gt1_target_value: %d, gt1_current_value: %d\n", $gt1_target_value, $gt1_current_value);
-my $warming_up = 1;
-my $target_temp = 210;
+($valid,$value)=CmdRespTemp(hex('81'),hex('02'),hex('21'),0);
+if ($valid) {print "Indoor temp setting 21=$value\n"} else {print "Error getting indoor temp:$value\n"}
 
-if ($warming_up == 1) {
-	printf("House is in warming up mode. target temp is %d. indoor temp setting is %d\n", $target_temp, $indoor_temp_setting);
+CmdWriteTemp(hex('81'), hex('03'), hex('2B'), 510); # original: 510
+CmdWriteTemp(hex('81'), hex('03'), hex('21'), 300); # original: 218
 
-	# if current target is not high enough then ramp target up
-	if ($gt1_current_value + 20 > $gt1_target_value && $gt1_current_value < 500) {
- 	  my $new_fine_adj = $fine_adj + 10;
-	  if ($new_fine_adj > 100) {
-	    $new_fine_adj = 100;
-	  }
-          printf("Current GT1 target value (%d) is too low when compared to target (%d). Changing fine adj from %d to %d\n", $gt1_current_value, $gt1_target_value, $fine_adj, $new_fine_adj);
-	  CmdWriteTemp(hex('81'), hex('03'), hex('01'), $new_fine_adj); # original: 1, temp fine adjust
+CmdWriteTemp(hex('81'), hex('03'), hex('00'), 15); # original: 55, temp curve
 
-	# if current target is too high then ramp it back down
-	} elsif ($gt1_current_value + 40 < $gt1_target_value && $gt1_current_value > 20) {
-	  my $new_fine_adj = $fine_adj - 10;
-	  if ($new_fine_adj < 0) {
-	    $new_fine_adj = 0;
-	  }
-	  printf("Current GT1 target value (%d) is too high when compared to target (%d), Changing fine adj from %d to %d\n", $gt1_current_value, $gt1_target_value, $fine_adj, $new_fine_adj);
-	  CmdWriteTemp(hex('81'), hex('03'), hex('01'), $new_fine_adj); # original: 1, temp fine adjust
-	} else {
-	  printf("GT1 target value (%d) is within bounds of current GT1 return (%d)\n", $gt1_target_value, $gt1_current_value);
-	}
-}	
+CmdWriteTemp(hex('81'), hex('03'), hex('01'), 100); # original: 1, temp fine adjust
+
+CmdWriteTemp(hex('81'), hex('03'), hex('22'), 0); # original: 5 aka 50%, indoor temp influences heating
 
 
+($valid,$value)=CmdRespTemp(hex('81'),hex('02'),hex('2B'),0);
+if ($valid) {print "GT3 Target value 2B=$value\n"} else {print "Error getting hot water GT3 target temp :$value\n"}
 
-print "== $datum ==\n==============================\n";
+($valid,$value)=CmdRespTemp(hex('81'),hex('02'),hex('21'),0);
+if ($valid) {print "Indoor temp setting 21=$value\n"} else {print "Error getting indoor temp:$value\n"}
+
+($valid,$value)=CmdRespTemp(hex('81'),hex('02'),hex('6C'),0);
+if ($valid) {print "Add heat power in % 6C=$value\n"} else {print "Error getting add heat power in % value:$value\n"}
+
 portdisconnect();
-
