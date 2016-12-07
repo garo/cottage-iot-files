@@ -14,6 +14,9 @@ homeassistant:
 # Enables the frontend
 frontend:
 
+recorder:
+  purge_days: 14 
+
 http:
   # Uncomment this to add a password (recommended!)
   # api_password: PASSWORD
@@ -40,4 +43,26 @@ sensor:
 zwave:
   usb_path: /dev/ttyACM0
   config_path: /usr/local/lib/python3.4/dist-packages/libopenzwave-0.3.1-py3.4-linux-armv7l.egg/config/
+
+influxdb:
+  host: ubuntu.juhonkoti.net
+  database: hass_mokki
+  username: ""
+  password: ""
+
+mqtt:
+  broker: 127.0.0.1
+  port: 1883
+  client_id: home-assistant-2
+  keepalive: 45
+  birth_message:
+    topic: 'nest/hass/status'
+    payload: 'online'
+    qos: 1
+    retain: true
+  will_message:
+    topic: 'nest/hass/status'
+    payload: 'offline'
+    qos: 1
+    retain: true
 
